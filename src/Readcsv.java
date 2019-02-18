@@ -9,31 +9,48 @@ import gegevens.*;
 
 public class Readcsv {
 
-	public FileReader fileReader;
-	public BufferedReader bufferedReader;
+	private FileReader fileReader;
+	private BufferedReader bufferedReader;
 	
 	
 	
-	public Readcsv(String Filelocatie) throws FileNotFoundException {
+	
+	public Readcsv() {
 		super();
-		this.fileReader = new FileReader(Filelocatie);
+	}
+
+		
+	public Readcsv(String Filelocatie){
+		super();
+		try {
+			this.fileReader = new FileReader(Filelocatie);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.bufferedReader = new BufferedReader(this.fileReader);
 	}
 	
-	public ArrayList<Reservatie> LeesReservaties() throws IOException
+	public ArrayList<Reservatie> LeesReservaties()
 	{
 		int aantal;
 		String lijn = null;
 		ArrayList<Reservatie> reservaties = new ArrayList<Reservatie>();
 		
-		lijn = bufferedReader.readLine();
+		try {
+			lijn = bufferedReader.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		lijn.replaceAll("\\D+", "");
 		System.out.println("lijn:");
 		System.out.println(lijn);
 		
 		
-		
-		
+		Reservatie test = new Reservatie();
+		test.setDag(12);
+		reservaties.add(test);
 		return reservaties;
 	}
 	
