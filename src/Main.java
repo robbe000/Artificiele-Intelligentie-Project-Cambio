@@ -4,17 +4,16 @@ import gegevens.*;
 import oplossing.*;
 
 public class Main {
-	ArrayList<Reservatie> reservaties;
-	ArrayList<Voertuig> voertuigen;
-	ArrayList<Zone> zones;
-	ArrayList<AReservatie> areservaties;
-	ArrayList<AVoertuig> avoertuigen;
-	
-	private Readcsv lees;
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		lees = new Readcsv("100_5_14_25");
+	private ArrayList<Reservatie> reservaties = new ArrayList<Reservatie>();
+	private ArrayList<Voertuig> voertuigen = new ArrayList<Voertuig>();
+	private ArrayList<Zone> zones = new ArrayList<Zone>();
+	private ArrayList<AReservatie> areservaties = new ArrayList<AReservatie>();
+	private ArrayList<AVoertuig> avoertuigen = new ArrayList<AVoertuig>();
+
+	public static void main(String[] args) {		
+		
+		
 	}
 
 }
