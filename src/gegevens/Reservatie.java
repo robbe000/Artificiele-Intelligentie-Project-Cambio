@@ -5,11 +5,18 @@ public class Reservatie {
 	private int id;
 	private int zoneId;
 	private int dag;
+	private int startTijd;
 	private int duur;
 	private ArrayList<Integer> voertuigID;
 	private int penalty1;
 	private int penalty2;
 	
+	public int getStartTijd() {
+		return startTijd;
+	}
+	public void setStartTijd(int startTijd) {
+		this.startTijd = startTijd;
+	}
 	public int getId() {
 		return id;
 	}
