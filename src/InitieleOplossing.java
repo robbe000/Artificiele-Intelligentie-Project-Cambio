@@ -17,4 +17,18 @@ public class InitieleOplossing {
 		
 		return oplossingen;
 	}
+	
+	public ArrayList<AVoertuig> genereerVoertuig(ArrayList<Voertuig> voertuigen, ArrayList<Zone> zones) {
+		ArrayList<AVoertuig> oplossingen = new ArrayList<AVoertuig>();
+		
+		for(Voertuig voertuig: voertuigen) {
+			AVoertuig oplossing = new AVoertuig();
+			oplossing.setVoertuigId(voertuig.getId());
+			oplossing.setZoneId(zones.get(0).getId());
+			
+			oplossingen.add(oplossing);
+		}
+		
+		return oplossingen;
+	}
 }
