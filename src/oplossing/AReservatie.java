@@ -2,7 +2,7 @@ package oplossing;
 
 public class AReservatie {
 	private int resId;
-	private int voertuigId;
+	private Integer voertuigId;	//Wanneer NULL -> niet gelukt
 	
 	public int getResId() {
 		return resId;
@@ -10,10 +10,10 @@ public class AReservatie {
 	public void setResId(int resId) {
 		this.resId = resId;
 	}
-	public int getVoertuigId() {
+	public Integer getVoertuigId() {
 		return voertuigId;
 	}
-	public void setVoertuigId(int voertuigId) {
+	public void setVoertuigId(Integer voertuigId) {
 		this.voertuigId = voertuigId;
 	}
 }
