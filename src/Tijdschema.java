@@ -29,7 +29,15 @@ public class Tijdschema {
 			for(int y = 0; y < aantReservaties; y++) {
 				if(x == y) schema[x][y] = true;
 				else {
-					
+					int dagX = this.getReservaties(x).getDag();
+					int startTijdX = this.getReservaties(x).getStartTijd();
+					int duurX = this.getReservaties(x).getDuur();
+					int dagY = this.getReservaties(y).getDag();
+					int startTijdY = this.getReservaties(y).getStartTijd();
+					int duurY = this.getReservaties(y).getDuur();
+						//1440 min in een dag
+					int beginX = (dagX * 1440);
+					int eindX = (dagX * 1440) + duurX;
 				}
 			}
 		}
