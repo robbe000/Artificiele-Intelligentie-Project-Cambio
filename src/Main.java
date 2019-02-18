@@ -9,10 +9,12 @@ public class Main {
 	ArrayList<Zone> zones;
 	ArrayList<AReservatie> areservaties;
 	ArrayList<AVoertuig> avoertuigen;
+	
+	private Readcsv lees;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-
+		lees = new Readcsv("100_5_14_25");
 	}
 
 }
