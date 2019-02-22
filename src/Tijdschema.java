@@ -36,8 +36,13 @@ public class Tijdschema {
 					int startTijdY = this.getReservaties(y).getStartTijd();
 					int duurY = this.getReservaties(y).getDuur();
 						//1440 min in een dag
-					int beginX = (dagX * 1440);
-					int eindX = (dagX * 1440) + duurX;
+					int beginX = (dagX * 1440) + startTijdX;	//de tijd in minuten startend van dag 0
+					int eindX = beginX + duurX;
+					int beginY = (dagY * 1440) + startTijdY;
+					int eindY = beginY + duurY;
+					
+					if(beginX >= eindY || eindX <= beginY) schema[x][y] = false;
+					else schema[x][y] = true;
 				}
 			}
 		}
