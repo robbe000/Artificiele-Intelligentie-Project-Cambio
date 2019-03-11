@@ -25,9 +25,6 @@ public class Tijdschema {
 		genereerSchema(aantReservaties);
 	}	
 	public void genereerSchema(int aantReservaties) {
-<<<<<<< HEAD
-		for(int x = 0; x < aantReservaties; x++);
-=======
 		for(int x = 0; x < aantReservaties; x++) {
 			for(int y = 0; y < aantReservaties; y++) {
 				if(x == y) schema[x][y] = true;
@@ -49,6 +46,5 @@ public class Tijdschema {
 				}
 			}
 		}
->>>>>>> 9dafb720cdb49af0afbb0967ce1f3c844bc94472
 	}
 }
