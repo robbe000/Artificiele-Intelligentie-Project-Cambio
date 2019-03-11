@@ -18,11 +18,11 @@ public class Tijdschema {
 		return reservaties.get(i);
 	}
 
-	public Tijdschema(int aantReservaties, ArrayList<Reservatie> reserv) {
+	public Tijdschema(ArrayList<Reservatie> reserv) {
 		super();
-		this.schema = new Boolean[aantReservaties][aantReservaties];
+		this.schema = new Boolean[reserv.size()][reserv.size()];
 		this.reservaties = reserv;
-		genereerSchema(aantReservaties);
+		genereerSchema(reserv.size());
 	}	
 	public void genereerSchema(int aantReservaties) {
 		for(int x = 0; x < aantReservaties; x++) {
