@@ -37,12 +37,11 @@ public class Zoeken {
 	private AVoertuig random(AOplossing oplossing, ArrayList<Zone> zones)
 	{
 		Random rand = new Random();
-		AVoertuig voertuig = oplossing.getVoertuig().get(rand.nextInt(oplossing.getVoertuig().size()));
-		
 		Random rand2 = new Random();
-		oplossing.getReservatie().get(rand2.nextInt(oplossing.getReservatie().size())).setVoertuig(voertuig);
-		oplossing.getReservatie().get(rand2.nextInt(oplossing.getReservatie().size())).setVoertuigId(voertuig.getVoertuigId());
-		
+		int randomnummer = rand.nextInt(oplossing.getVoertuig().size());
+		int randomnummer2 = rand2.nextInt(zones.size());
+		oplossing.getVoertuig().get(randomnummer).setZoneId(randomnummer2);
+		AVoertuig voertuig = oplossing.getVoertuig().get(randomnummer);
 		return voertuig;
 	}
 
