@@ -3,7 +3,7 @@ import oplossing.*;
 
 import java.util.*;
 
-public class berekenKost {
+public class BerekenKost {
 	public static int bereken(ArrayList<AVoertuig> voertuigen, ArrayList<AReservatie> reservaties) {
 		int kost = 0;
 

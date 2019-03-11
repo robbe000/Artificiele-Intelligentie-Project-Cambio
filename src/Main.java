@@ -10,6 +10,7 @@ public class Main {
 	private static ArrayList<Zone> zones = new ArrayList<Zone>();
 	private static ArrayList<AReservatie> areservaties = new ArrayList<AReservatie>();
 	private static ArrayList<AVoertuig> avoertuigen = new ArrayList<AVoertuig>();
+	private static int kost;
 	
 	private static Readcsv lees;
 	private static Writecsv schrijf;
@@ -48,6 +49,11 @@ public class Main {
 		//Initiele oplossing genereren
 		avoertuigen = InitieleOplossing.genereerVoertuig(voertuigen, zones);
 		areservaties = InitieleOplossing.genereerReservatie(reservaties);
+		
+		//Kost berekenen
+		kost = BerekenKost.bereken(avoertuigen, areservaties);
+		
+		System.out.println("Kost: " + Integer.toString(kost));
 		
 		
 		// wegschrijven naar file
