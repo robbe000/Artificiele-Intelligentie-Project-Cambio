@@ -12,6 +12,7 @@ public class Main {
 	private static ArrayList<AVoertuig> avoertuigen = new ArrayList<AVoertuig>();
 	
 	private static Readcsv lees;
+	private static Writecsv schrijf;
 
 	public static void main(String[] args) {
 		//INLEZEN		
@@ -47,6 +48,13 @@ public class Main {
 		//Initiele oplossing genereren
 		avoertuigen = InitieleOplossing.genereerVoertuig(voertuigen, zones);
 		areservaties = InitieleOplossing.genereerReservatie(reservaties);
+		
+		
+		// wegschrijven naar file
+		
+		schrijf = new Writecsv("oplossing.csv");
+		schrijf.writeTocsv(reservaties.size(), areservaties, avoertuigen);
+		
 	}
 
 }
