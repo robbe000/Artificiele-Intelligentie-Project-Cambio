@@ -33,21 +33,56 @@ public class Writecsv {
 		this.bufferedwriter = new BufferedWriter(this.filewriter);
 	}
 	
-	public void writeTocsv(int aantal_req, ArrayList<AReservatie> areservaties, ArrayList<AVoertuig> avoertuigen)
+	public void writeTocsv(int kost, ArrayList<AReservatie> areservaties, ArrayList<AVoertuig> avoertuigen)
 	{
 		String schrijfweg;
-		schrijfweg = Integer.toString(aantal_req);
+		schrijfweg = Integer.toString(kost);
 		try {
 			this.bufferedwriter.write(schrijfweg);
 			this.bufferedwriter.newLine();
+			
+			
+			
+			
 			schrijfweg = "=+Vehicle assignments";
+			this.bufferedwriter.write(schrijfweg);
 			this.bufferedwriter.newLine();
 			
 			for(int i = 0; i< avoertuigen.size(); i++) 
 			{
-				//schrijfweg = "car" + Integer.toString(avoertuigen.get(i).getVoertuigId()) + ";" +
+				schrijfweg = "car" + Integer.toString(avoertuigen.get(i).getVoertuigId()) + ";"+ "z" + avoertuigen.get(i).getZoneId();
+				this.bufferedwriter.write(schrijfweg);
+				this.bufferedwriter.newLine();
 			}
 			
+			schrijfweg = "=+Assigned requests";
+			this.bufferedwriter.write(schrijfweg);
+			this.bufferedwriter.newLine();			
+	
+			for(int i = 0; i< areservaties.size(); i++) 
+			{
+				if(areservaties.get(i).getVoertuigId() != null)
+				{
+					schrijfweg = "req" + Integer.toString(areservaties.get(i).getResId()) + ";" + areservaties.get(i).getVoertuigId();
+					this.bufferedwriter.write(schrijfweg);
+					this.bufferedwriter.newLine();
+				}
+			}
+			
+			
+			schrijfweg = "=+Unassigned requests";
+			this.bufferedwriter.write(schrijfweg);
+			this.bufferedwriter.newLine();			
+	
+			for(int i = 0; i< areservaties.size(); i++) 
+			{
+				if(areservaties.get(i).getVoertuigId() == null)
+				{
+					schrijfweg = "req" + Integer.toString(areservaties.get(i).getResId());
+					this.bufferedwriter.write(schrijfweg);
+					this.bufferedwriter.newLine();
+				}
+			}		
 			
 			
 			this.bufferedwriter.close();			

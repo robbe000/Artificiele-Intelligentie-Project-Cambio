@@ -59,7 +59,7 @@ public class Main {
 		// wegschrijven naar file
 		
 		schrijf = new Writecsv("oplossing.csv");
-		schrijf.writeTocsv(reservaties.size(), areservaties, avoertuigen);
+		schrijf.writeTocsv(kost, areservaties, avoertuigen);
 		
 	}
 
