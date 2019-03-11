@@ -61,7 +61,7 @@ public class Main {
 		
 		//Lokaal zoeken
 		Zoeken zoek = new Zoeken();
-		oplossing = zoek.zoeken(oplossing);
+		oplossing = zoek.zoeken(oplossing, zones);
 		
 		
 		

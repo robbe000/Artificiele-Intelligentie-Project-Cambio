@@ -1,5 +1,6 @@
 package LokaalZoeken;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import gegevens.*;
@@ -8,7 +9,12 @@ import oplossing.*;
 public class Zoeken {
 	private AOplossing besteOplossing;
 	
-	public AOplossing zoeken(AOplossing oplossing) {
+	public AOplossing zoeken(AOplossing oplossing, ArrayList<Zone> zones) {
+		
+		System.out.println("Zoeken:");
+		AVoertuig verplaatstVoertuig = random(oplossing, zones);
+		System.out.println("Verplaatst voertuig: " + Integer.toString(verplaatstVoertuig.getVoertuigId()) + "; Zone: "+ Integer.toString(verplaatstVoertuig.getZoneId()));
+		
 		return oplossing;
 	}
 	
@@ -28,7 +34,7 @@ public class Zoeken {
 		return oplossing;
 	}
 	
-	private AVoertuig random(AOplossing oplossing)
+	private AVoertuig random(AOplossing oplossing, ArrayList<Zone> zones)
 	{
 		Random rand = new Random();
 		AVoertuig voertuig = oplossing.getVoertuig().get(rand.nextInt(oplossing.getVoertuig().size()));
