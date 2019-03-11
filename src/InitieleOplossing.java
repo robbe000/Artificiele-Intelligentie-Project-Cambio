@@ -4,7 +4,7 @@ import oplossing.*;
 import java.util.*;
 
 public class InitieleOplossing {
-	public ArrayList<AReservatie> genereerReservatie(ArrayList<Reservatie> reservaties) {
+	public static ArrayList<AReservatie> genereerReservatie(ArrayList<Reservatie> reservaties) {
 		ArrayList<AReservatie> oplossingen = new ArrayList<AReservatie>();
 		
 		for(Reservatie reservatie: reservaties) {
@@ -18,7 +18,7 @@ public class InitieleOplossing {
 		return oplossingen;
 	}
 	
-	public ArrayList<AVoertuig> genereerVoertuig(ArrayList<Voertuig> voertuigen, ArrayList<Zone> zones) {
+	public static ArrayList<AVoertuig> genereerVoertuig(ArrayList<Voertuig> voertuigen, ArrayList<Zone> zones) {
 		ArrayList<AVoertuig> oplossingen = new ArrayList<AVoertuig>();
 		
 		for(Voertuig voertuig: voertuigen) {

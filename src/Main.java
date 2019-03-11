@@ -13,8 +13,8 @@ public class Main {
 	
 	private static Readcsv lees;
 
-	public static void main(String[] args) {		
-		
+	public static void main(String[] args) {
+		//INLEZEN		
 		lees = new Readcsv("100_5_14_25.csv");
 		reservaties = lees.LeesReservaties();
 		
@@ -41,7 +41,12 @@ public class Main {
 		}	
 		
 		lees.closeLees();
-		// dagen ook uitlezen, laatste lijn csv?
+		//dagen ook uitlezen, laatste lijn csv?
+		
+		
+		//Initiele oplossing genereren
+		avoertuigen = InitieleOplossing.genereerVoertuig(voertuigen, zones);
+		areservaties = InitieleOplossing.genereerReservatie(reservaties);
 	}
 
 }
