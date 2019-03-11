@@ -2,6 +2,7 @@ import java.util.*;
 
 import gegevens.*;
 import oplossing.*;
+import LokaalZoeken.*;
 
 public class Main {
 
@@ -53,13 +54,20 @@ public class Main {
 		//Kost berekenen
 		kost = BerekenKost.bereken(avoertuigen, areservaties);
 		
+		//Kost initiele oplossing
 		System.out.println("Kost: " + Integer.toString(kost));
+		
+		AOplossing oplossing = new AOplossing(areservaties, avoertuigen);
+		
+		//Lokaal zoeken
+		Zoeken zoek = new Zoeken();
+		oplossing = zoek.zoeken(oplossing);
+		
 		
 		
 		// wegschrijven naar file
-		
 		schrijf = new Writecsv("oplossing.csv");
-		schrijf.writeTocsv(kost, areservaties, avoertuigen);
+		schrijf.writeTocsv(kost, oplossing.getReservatie(), oplossing.getVoertuig());
 		
 	}
 

@@ -1,22 +1,35 @@
 package oplossing;
+import java.util.ArrayList;
+
 import gegevens.*;
 import oplossing.*;
 
 public class AOplossing {
-	private AReservatie reservatie;
-	private AVoertuig voertuig;
-	public AReservatie getReservatie() {
+	private ArrayList<AReservatie> reservatie;
+	private ArrayList<AVoertuig> voertuig;
+	
+	public AOplossing(ArrayList<AReservatie> areservaties, ArrayList<AVoertuig> avoertuigen) {
+		setReservatie(areservaties);
+		setVoertuig(avoertuigen);
+	}
+
+	public ArrayList<AReservatie> getReservatie() {
 		return reservatie;
 	}
-	public void setReservatie(AReservatie reservatie) {
+
+	public void setReservatie(ArrayList<AReservatie> reservatie) {
 		this.reservatie = reservatie;
 	}
-	public AVoertuig getVoertuig() {
+
+	public ArrayList<AVoertuig> getVoertuig() {
 		return voertuig;
 	}
-	public void setVoertuig(AVoertuig voertuig) {
+
+	public void setVoertuig(ArrayList<AVoertuig> voertuig) {
 		this.voertuig = voertuig;
 	}
+	
+
 	
 	
 }
