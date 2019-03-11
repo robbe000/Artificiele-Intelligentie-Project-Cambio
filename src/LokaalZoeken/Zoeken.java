@@ -34,6 +34,16 @@ public class Zoeken {
 		return oplossing;
 	}
 	
+	private boolean isLinked(AVoertuig voertuig) {
+		if(voertuig != null) return true;
+		else return false;
+	}
+	
+	private void unlink(AReservatie reservatie) {
+		reservatie.setVoertuig(null);
+		reservatie.setVoertuigId(null);
+	}
+
 	private AVoertuig random(AOplossing oplossing, ArrayList<Zone> zones)
 	{
 		Random rand = new Random();
@@ -44,5 +54,4 @@ public class Zoeken {
 		AVoertuig voertuig = oplossing.getVoertuig().get(randomnummer);
 		return voertuig;
 	}
-
 }
