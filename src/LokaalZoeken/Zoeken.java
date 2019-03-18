@@ -18,7 +18,7 @@ public class Zoeken {
 		int bestKost = 100000000;
 		AOplossing besteOplossing = null;
 		
-		while(teller < 100000) {
+		while(teller < 1000000) {
 			//Random voertuig nemen en en random zone plaatsen
 			AVoertuig verplaatstVoertuig = random(oplossing, zones);
 			System.out.println("Verplaatst voertuig: " + Integer.toString(verplaatstVoertuig.getVoertuigId()) + "; Zone: "+ Integer.toString(verplaatstVoertuig.getZoneId()));

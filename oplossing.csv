@@ -1,21 +1,21 @@
 32690
 =+Vehicle assignments
-car0;z2
-car1;z3
-car2;z1
+car0;z5
+car1;z12
+car2;z14
 car3;z2
 car4;z6
-car5;z0
-car6;z20
-car7;z15
-car8;z10
-car9;z10
-car10;z24
-car11;z3
+car5;z13
+car6;z15
+car7;z20
+car8;z3
+car9;z2
+car10;z7
+car11;z22
 car12;z0
-car13;z0
+car13;z10
 =+Assigned requests
-req0;5
+req0;car12
 =+Unassigned requests
 req1
 req2

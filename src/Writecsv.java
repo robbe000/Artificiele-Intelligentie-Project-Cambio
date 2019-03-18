@@ -63,7 +63,7 @@ public class Writecsv {
 			{
 				if(areservaties.get(i).getVoertuigId() != null)
 				{
-					schrijfweg = "req" + Integer.toString(areservaties.get(i).getResId()) + ";" + areservaties.get(i).getVoertuigId();
+					schrijfweg = "req" + Integer.toString(areservaties.get(i).getResId()) + ";" + "car" +areservaties.get(i).getVoertuigId();
 					this.bufferedwriter.write(schrijfweg);
 					this.bufferedwriter.newLine();
 				}
