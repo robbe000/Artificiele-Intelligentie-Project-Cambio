@@ -18,7 +18,7 @@ public class Zoeken {
 		int bestKost = 100000000;
 		AOplossing besteOplossing = null;
 		
-		while(teller < 100000) {
+		while(teller < 1000000) {
 			//Random voertuig nemen en en random zone plaatsen
 			AVoertuig verplaatstVoertuig = random(oplossing, zones);
 			System.out.println("Verplaatst voertuig: " + Integer.toString(verplaatstVoertuig.getVoertuigId()) + "; Zone: "+ Integer.toString(verplaatstVoertuig.getZoneId()));
@@ -33,7 +33,7 @@ public class Zoeken {
 			}
 			
 			
-			oplossing = linkToRes(verplaatstVoertuig, oplossing);
+			oplossing = linkToRes(verplaatstVoertuig, oplossing, zones);
 			
 			//Kost berekenen
 			int kost = BerekenKost.bereken(oplossing.getVoertuig(), oplossing.getReservatie());
@@ -54,7 +54,7 @@ public class Zoeken {
 	}
 	
 	//Linken aan nieuwe mogelijke reservatie
-	private AOplossing linkToRes(AVoertuig voertuig, AOplossing oplossing) {
+	private AOplossing linkToRes(AVoertuig voertuig, AOplossing oplossing, ArrayList<Zone> zones) {
 		for(AReservatie reservatie : oplossing.getReservatie()) {
 			//In de gewenste zone? => Dit hebben we het liefst!
 			if(reservatie.getGewZoneId() == voertuig.getZoneId()) {
@@ -62,10 +62,25 @@ public class Zoeken {
 				reservatie.setVoertuigId(voertuig.getVoertuigId());
 				return oplossing;
 			}
-			//Ook nog met omliggende zones!
+			
+			//Ook nog met omliggende zones
+			for(Zone zone : zones) {
+				if(zone.getId() == voertuig.getZoneId()) {
+					//Over de zones
+					for(int zoneAanliggend : zone.getAanliggendId()) {
+						if(zoneAanliggend == voertuig.getZoneId()) {
+							reservatie.setVoertuig(voertuig);
+							reservatie.setVoertuigId(voertuig.getVoertuigId());
+							return oplossing;
+						}
+					}
+				}
+			}
+			
 			
 		}		
 		
+		unlink(oplossing, voertuig);
 		return oplossing;
 	}
 	
