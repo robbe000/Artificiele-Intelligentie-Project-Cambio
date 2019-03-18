@@ -1,3 +1,4 @@
+package LokaalZoeken;
 import gegevens.*;
 import oplossing.*;
 
