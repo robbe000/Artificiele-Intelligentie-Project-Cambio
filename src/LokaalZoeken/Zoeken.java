@@ -68,9 +68,9 @@ public class Zoeken {
 				if(zone.getId() == voertuig.getZoneId()) {
 					//Over de zones
 					for(int zoneAanliggend : zone.getAanliggendId()) {
-						if(zoneAanliggend == voertuig.getZoneId()) {
+						if(zoneAanliggend == reservatie.getGewZoneId()) {
 							reservatie.setVoertuig(voertuig);
-							reservatie.setVoertuigId(voertuig.getVoertuigId());
+							reservatie.setVoertuigId(voertuig.getVoertuigId());							
 							return oplossing;
 						}
 					}
