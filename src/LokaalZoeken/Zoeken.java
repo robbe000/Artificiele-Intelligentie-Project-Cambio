@@ -10,7 +10,7 @@ import oplossing.*;
 public class Zoeken {
 	private AOplossing besteOplossing;
 	
-	public AOplossing zoeken(AOplossing oplossing, ArrayList<Zone> zones) {
+	public AOplossing zoeken(AOplossing oplossing, ArrayList<Zone> zones, ArrayList<Reservatie> reservatiesOpgave) {
 		
 		System.out.println("Zoeken:");
 		
@@ -20,26 +20,26 @@ public class Zoeken {
 		
 		while(teller < 1000000) {
 			//Random voertuig nemen en en random zone plaatsen
-			AVoertuig verplaatstVoertuig = random(oplossing, zones);
-			System.out.println("Verplaatst voertuig: " + Integer.toString(verplaatstVoertuig.getVoertuigId()) + "; Zone: "+ Integer.toString(verplaatstVoertuig.getZoneId()));
+			int verplaatstVoertuigId = random(oplossing, zones);
+			//System.out.println("Verplaatst voertuig: " + Integer.toString(verplaatstVoertuigId) + "; Zone: "+ Integer.toString(oplossing.getVoertuig().get(verplaatstVoertuigId).getZoneId()));
 			
 			//Is voertuig gelinkt aan zone?
-			if(isLinked(verplaatstVoertuig, oplossing)) {
+			if(isLinked(oplossing.getVoertuig().get(verplaatstVoertuigId), oplossing)) {
 				System.out.println("Linked");
-				//Is de link mogelijk of niet mogelijk?
-				if(!isMogelijk(verplaatstVoertuig, zones, oplossing)) {
-					unlink(oplossing, verplaatstVoertuig);
+				//Is de nieuwe link mogelijk of niet mogelijk?
+				if(!isMogelijk(oplossing.getVoertuig().get(verplaatstVoertuigId), zones, oplossing)) {
+					unlink(oplossing, oplossing.getVoertuig().get(verplaatstVoertuigId));
+					oplossing = linkToRes(oplossing.getVoertuig().get(verplaatstVoertuigId), oplossing, zones, reservatiesOpgave);
 				}
+			} else {
+				oplossing = linkToRes(oplossing.getVoertuig().get(verplaatstVoertuigId), oplossing, zones, reservatiesOpgave);
 			}
-			
-			
-			oplossing = linkToRes(verplaatstVoertuig, oplossing, zones);
 			
 			//Kost berekenen
 			int kost = BerekenKost.bereken(oplossing.getVoertuig(), oplossing.getReservatie());
 					
 			//Kost initiele oplossing
-			System.out.println("Kost: " + Integer.toString(kost));
+			//System.out.println("Kost: " + Integer.toString(kost));
 			
 			if(kost < bestKost) {
 				bestKost = kost;
@@ -54,33 +54,52 @@ public class Zoeken {
 	}
 	
 	//Linken aan nieuwe mogelijke reservatie
-	private AOplossing linkToRes(AVoertuig voertuig, AOplossing oplossing, ArrayList<Zone> zones) {
+	private AOplossing linkToRes(AVoertuig voertuig, AOplossing oplossing, ArrayList<Zone> zones, ArrayList<Reservatie> reservatieOpgave) {
 		for(AReservatie reservatie : oplossing.getReservatie()) {
 			//In de gewenste zone? => Dit hebben we het liefst!
 			if(reservatie.getGewZoneId() == voertuig.getZoneId()) {
-				reservatie.setVoertuig(voertuig);
-				reservatie.setVoertuigId(voertuig.getVoertuigId());
-				return oplossing;
-			}
-			
+				
+				int gevonden = 0;
+				
+				for(int mogelijkVoertuig : reservatieOpgave.get(reservatie.getResId()).getVoertuigID()) {
+					if(mogelijkVoertuig == voertuig.getVoertuigId()) {
+						gevonden = 1;
+					}
+				}
+				
+				if(gevonden == 1) {
+					if(reservatie.getVoertuig() == null) {
+						reservatie.setVoertuig(voertuig);
+						reservatie.setVoertuigId(voertuig.getVoertuigId());
+						System.out.println("Voertuig " + voertuig.getVoertuigId() + " gelinkt aan reservatie " + reservatie.getResId() + " in zone " + voertuig.getZoneId());
+						return oplossing;
+					}
+				}
+			}			
+		}		
+		
+		/*
+		for(AReservatie reservatie : oplossing.getReservatie()) {
 			//Ook nog met omliggende zones
 			for(Zone zone : zones) {
 				if(zone.getId() == voertuig.getZoneId()) {
 					//Over de zones
 					for(int zoneAanliggend : zone.getAanliggendId()) {
 						if(zoneAanliggend == reservatie.getGewZoneId()) {
-							reservatie.setVoertuig(voertuig);
-							reservatie.setVoertuigId(voertuig.getVoertuigId());							
-							return oplossing;
+							if(reservatie.getVoertuig() == null) {
+								reservatie.setVoertuig(voertuig);
+								reservatie.setVoertuigId(voertuig.getVoertuigId());	
+								System.out.println("Voertuig " + voertuig.getVoertuigId() + " gelinkt aan reservatie " + reservatie.getResId() + "(OMLIGGENDE ZONE)");
+								return oplossing;
+							}
 						}
 					}
 				}
 			}
-			
-			
-		}		
+		}
+		*/
 		
-		unlink(oplossing, voertuig);
+		//unlink(oplossing, voertuig);
 		return oplossing;
 	}
 	
@@ -114,10 +133,11 @@ public class Zoeken {
 			}
 		}
 		
-		System.out.println("Het is niet mogelijk!");
+		System.out.println("Het is niet mogelijk! ("+ voertuig.getVoertuigId() +")");
 		return false;
 	}
 	
+	//Is het voertuig al gelinkt aan een reservatie?
 	private boolean isLinked(AVoertuig voertuig, AOplossing oplossing) {
 		for(AReservatie reservatie : oplossing.getReservatie()) {
 			if(reservatie.getVoertuigId() != null) {
@@ -140,14 +160,39 @@ public class Zoeken {
 		}	
 	}
 
-	private AVoertuig random(AOplossing oplossing, ArrayList<Zone> zones)
+	private int random(AOplossing oplossing, ArrayList<Zone> zones)
 	{
 		Random rand = new Random();
 		Random rand2 = new Random();
-		int randomnummer = rand.nextInt(oplossing.getVoertuig().size());
+		
+		ArrayList<Integer> randomnummer = new ArrayList<Integer>();
+		
+		randomnummer.add(rand.nextInt(oplossing.getVoertuig().size()));
+		randomnummer.add(rand.nextInt(oplossing.getVoertuig().size()));
+		randomnummer.add(rand.nextInt(oplossing.getVoertuig().size()));
+		randomnummer.add(rand.nextInt(oplossing.getVoertuig().size()));
+		randomnummer.add(rand.nextInt(oplossing.getVoertuig().size()));
+		
 		int randomnummer2 = rand2.nextInt(zones.size());
-		oplossing.getVoertuig().get(randomnummer).setZoneId(randomnummer2);
-		AVoertuig voertuig = oplossing.getVoertuig().get(randomnummer);
-		return voertuig;
+		
+		for(int random : randomnummer) {
+			int gevonden = 0;
+			for(AReservatie reservatie : oplossing.getReservatie()) {
+				if(reservatie.getVoertuigId() != null) {
+					if(random == reservatie.getVoertuigId()) {
+						gevonden = 1;
+					}
+				}
+			}
+			if(gevonden == 0) {
+				oplossing.getVoertuig().get(random).setZoneId(randomnummer2);
+				return random;
+			}
+		}
+		
+		oplossing.getVoertuig().get(randomnummer.get(0)).setZoneId(randomnummer2);
+
+		//Aangepast voertuigId teruggeven
+		return randomnummer.get(0);
 	}
 }

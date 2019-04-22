@@ -61,9 +61,10 @@ public class Main {
 		
 		//Lokaal zoeken
 		Zoeken zoek = new Zoeken();
-		oplossing = zoek.zoeken(oplossing, zones);
+		oplossing = zoek.zoeken(oplossing, zones, reservaties);
 		
-		
+		//Kost berekenen
+		kost = BerekenKost.bereken(oplossing.getVoertuig(), oplossing.getReservatie());
 		
 		// wegschrijven naar file
 		schrijf = new Writecsv("oplossing.csv");
