@@ -29,7 +29,7 @@ public class Zoeken {
 				//Is de nieuwe link mogelijk of niet mogelijk?
 				if(!isMogelijk(oplossing.getVoertuig().get(verplaatstVoertuigId), zones, oplossing)) {
 					unlink(oplossing, oplossing.getVoertuig().get(verplaatstVoertuigId));
-					oplossing = linkToRes(oplossing.getVoertuig().get(verplaatstVoertuigId), oplossing, zones, reservatiesOpgave);
+					//oplossing = linkToRes(oplossing.getVoertuig().get(verplaatstVoertuigId), oplossing, zones, reservatiesOpgave);
 				}
 			} else {
 				oplossing = linkToRes(oplossing.getVoertuig().get(verplaatstVoertuigId), oplossing, zones, reservatiesOpgave);
@@ -122,7 +122,7 @@ public class Zoeken {
 						if(zone.getId() == reservatie.getGewZoneId()) {
 							//Aanliggende zones overlopen
 							for(int id : zone.getAanliggendId()) {
-								if(zone.getId() == voertuig.getZoneId()) {
+								if(id == voertuig.getZoneId()) {
 									System.out.println("In de omliggende zone");
 									return true;
 								}
