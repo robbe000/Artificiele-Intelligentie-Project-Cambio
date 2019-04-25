@@ -1,10 +1,11 @@
 package oplossing;
+import java.io.*;
 import java.util.ArrayList;
 
 import gegevens.*;
 import oplossing.*;
 
-public class AOplossing {
+public class AOplossing implements Cloneable {
 	private ArrayList<AReservatie> reservatie;
 	private ArrayList<AVoertuig> voertuig;
 	
@@ -12,6 +13,8 @@ public class AOplossing {
 		setReservatie(areservaties);
 		setVoertuig(avoertuigen);
 	}
+
+	public AOplossing() {}
 
 	public ArrayList<AReservatie> getReservatie() {
 		return reservatie;
@@ -29,7 +32,26 @@ public class AOplossing {
 		this.voertuig = voertuig;
 	}
 	
+	public AOplossing copy() {
+		return (AOplossing) this.deepCopy(this);
+	}
 
-	
+	/**
+	 * Makes a deep copy of any Java object that is passed.
+	 */
+	 private Object deepCopy(Object object) {
+	   try {
+	     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+	     ObjectOutputStream outputStrm = new ObjectOutputStream(outputStream);
+	     outputStrm.writeObject(object);
+	     ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+	     ObjectInputStream objInputStream = new ObjectInputStream(inputStream);
+	     return objInputStream.readObject();
+	   }
+	   catch (Exception e) {
+	     e.printStackTrace();
+	     return null;
+	   }
+	 }
 	
 }

@@ -15,6 +15,7 @@ public class InitieleOplossing {
 			oplossing.setVoertuigId(null);
 			oplossing.setPenalty1(reservatie.getPenalty1());
 			oplossing.setPenalty2(reservatie.getPenalty2());
+			oplossing.setGewZoneId(reservatie.getZoneId());
 			
 			oplossingen.add(oplossing);
 		}

@@ -8,7 +8,6 @@ import oplossing.*;
 
 
 public class Zoeken {
-	private AOplossing besteOplossing;
 	
 	public AOplossing zoeken(AOplossing oplossing, ArrayList<Zone> zones, ArrayList<Reservatie> reservatiesOpgave) {
 		
@@ -16,12 +15,12 @@ public class Zoeken {
 		
 		int teller = 0;
 		int bestKost = 100000000;
-		AOplossing besteOplossing = null;
+		AOplossing besteOplossing = new AOplossing();
 		
-		while(teller < 1000000) {
+		while(teller < 10000) {
 			//Random voertuig nemen en en random zone plaatsen
 			int verplaatstVoertuigId = random(oplossing, zones);
-			//System.out.println("Verplaatst voertuig: " + Integer.toString(verplaatstVoertuigId) + "; Zone: "+ Integer.toString(oplossing.getVoertuig().get(verplaatstVoertuigId).getZoneId()));
+			System.out.println("Verplaatst voertuig: " + Integer.toString(verplaatstVoertuigId) + "; Zone: "+ Integer.toString(oplossing.getVoertuig().get(verplaatstVoertuigId).getZoneId()));
 			
 			//Is voertuig gelinkt aan zone?
 			if(isLinked(oplossing.getVoertuig().get(verplaatstVoertuigId), oplossing)) {
@@ -39,11 +38,12 @@ public class Zoeken {
 			int kost = BerekenKost.bereken(oplossing.getVoertuig(), oplossing.getReservatie());
 					
 			//Kost initiele oplossing
-			//System.out.println("Kost: " + Integer.toString(kost));
+			System.out.println("Kost: " + Integer.toString(kost));
 			
 			if(kost < bestKost) {
 				bestKost = kost;
-				besteOplossing = oplossing;
+
+				besteOplossing = oplossing.copy();
 			}
 		
 			teller++;
@@ -121,8 +121,8 @@ public class Zoeken {
 						//Zone zoeken
 						if(zone.getId() == reservatie.getGewZoneId()) {
 							//Aanliggende zones overlopen
-							for(int id : zone.getAanliggendId()) {
-								if(zone.getId() == voertuig.getZoneId()) {
+							for(int idAanliggend : zone.getAanliggendId()) {
+								if(voertuig.getZoneId() == idAanliggend) {
 									System.out.println("In de omliggende zone");
 									return true;
 								}

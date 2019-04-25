@@ -11,7 +11,6 @@ public class Main {
 	private static ArrayList<Zone> zones = new ArrayList<Zone>();
 	private static ArrayList<AReservatie> areservaties = new ArrayList<AReservatie>();
 	private static ArrayList<AVoertuig> avoertuigen = new ArrayList<AVoertuig>();
-	private static int kost;
 	
 	private static Readcsv lees;
 	private static Writecsv schrijf;
@@ -20,6 +19,7 @@ public class Main {
 		//INLEZEN		
 		lees = new Readcsv("100_5_14_25.csv");
 		reservaties = lees.LeesReservaties();
+		int kost;
 		
 		//testprint van reservaties
 		for(int i = 0; i< reservaties.size(); i++)
