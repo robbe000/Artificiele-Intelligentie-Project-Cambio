@@ -15,7 +15,7 @@ public class Zoeken {
 		
 		int teller = 0;
 		int bestKost = 100000000;
-		AOplossing besteOplossing = new AOplossing();
+		AOplossing besteOplossing = null;
 		
 		while(teller < 10000) {
 			//Random voertuig nemen en en random zone plaatsen
@@ -42,13 +42,14 @@ public class Zoeken {
 			
 			if(kost < bestKost) {
 				bestKost = kost;
-
 				besteOplossing = oplossing.copy();
+				System.out.println("Herberekende kost = " + BerekenKost.bereken(besteOplossing.getVoertuig(), besteOplossing.getReservatie()));
 			}
 		
 			teller++;
 		}
 		
+		System.out.println("Herberekende kost = " + BerekenKost.bereken(besteOplossing.getVoertuig(), besteOplossing.getReservatie()));
 		System.out.println("Bestkost = "+ bestKost);
 		return besteOplossing;
 	}

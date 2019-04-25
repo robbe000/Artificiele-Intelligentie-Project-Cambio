@@ -33,25 +33,43 @@ public class AOplossing implements Cloneable {
 	}
 	
 	public AOplossing copy() {
-		return (AOplossing) this.deepCopy(this);
+		AOplossing copy = new AOplossing();
+		
+		ArrayList<AReservatie> copyReservaties = new ArrayList<AReservatie>();	
+		for(AReservatie reservatie : this.getReservatie()) {
+			AReservatie copyReservatie = new AReservatie();
+			copyReservatie.setGewZoneId(reservatie.getGewZoneId());
+			copyReservatie.setPenalty1(reservatie.getPenalty1());
+			copyReservatie.setPenalty2(reservatie.getPenalty2());
+			copyReservatie.setResId(reservatie.getResId());
+			
+			if(reservatie.getVoertuig() != null ) {
+				AVoertuig copyVoertuig = new AVoertuig();
+				copyVoertuig.setVoertuigId(reservatie.getVoertuig().getVoertuigId());
+				copyVoertuig.setZoneId(reservatie.getVoertuig().getZoneId());
+				copyReservatie.setVoertuig(copyVoertuig);
+			} else {
+				copyReservatie.setVoertuig(null);
+			}
+			
+			
+			copyReservatie.setVoertuigId(reservatie.getVoertuigId());
+			
+			copyReservaties.add(copyReservatie);
+		}
+		copy.setReservatie(copyReservaties);
+		
+		ArrayList<AVoertuig> copyVoertuigen = new ArrayList<AVoertuig>();
+		for(AVoertuig voertuig : this.getVoertuig()) {
+			AVoertuig copyVoertuig = new AVoertuig();
+			copyVoertuig.setVoertuigId(voertuig.getVoertuigId());
+			copyVoertuig.setZoneId(voertuig.getZoneId());
+			
+			copyVoertuigen.add(copyVoertuig);
+		}
+		copy.setVoertuig(copyVoertuigen);
+		
+		return copy;
 	}
-
-	/**
-	 * Makes a deep copy of any Java object that is passed.
-	 */
-	 private Object deepCopy(Object object) {
-	   try {
-	     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-	     ObjectOutputStream outputStrm = new ObjectOutputStream(outputStream);
-	     outputStrm.writeObject(object);
-	     ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
-	     ObjectInputStream objInputStream = new ObjectInputStream(inputStream);
-	     return objInputStream.readObject();
-	   }
-	   catch (Exception e) {
-	     e.printStackTrace();
-	     return null;
-	   }
-	 }
 	
 }

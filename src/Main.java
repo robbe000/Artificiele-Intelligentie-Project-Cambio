@@ -65,6 +65,7 @@ public class Main {
 		
 		//Kost berekenen
 		kost = BerekenKost.bereken(oplossing.getVoertuig(), oplossing.getReservatie());
+		System.out.println("Bestkost (In main)= "+ kost);
 		
 		// wegschrijven naar file
 		schrijf = new Writecsv("oplossing.csv");
