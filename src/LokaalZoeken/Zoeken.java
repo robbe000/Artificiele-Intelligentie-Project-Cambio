@@ -19,17 +19,60 @@ public class Zoeken {
 		int bestKost = 100000000;
 		AOplossing besteOplossing = null;
 		
-		while(teller < 10000000) {
+		while(teller < 100000000) {
 			//Random voertuig nemen en en random zone plaatsen
 			int verplaatstVoertuigId = random(oplossing, zones);
 			//System.out.println("Verplaatst voertuig: " + Integer.toString(verplaatstVoertuigId) + "; Zone: "+ Integer.toString(oplossing.getVoertuig().get(verplaatstVoertuigId).getZoneId()));
+			
+			
 			
 			//Is voertuig gelinkt aan zone?
 			if(isLinked(oplossing.getVoertuig().get(verplaatstVoertuigId), oplossing)) {
 				//System.out.println("Linked");
 				//Is de nieuwe link mogelijk of niet mogelijk?
+				
+				int i = 0;
+				while(i <= oplossing.getVoertuig().get(verplaatstVoertuigId).getReservaties().size()) {
+					for(AReservatie r : oplossing.getVoertuig().get(verplaatstVoertuigId).getReservaties()) {
+						if(r.getGewZoneId() == oplossing.getVoertuig().get(verplaatstVoertuigId).getZoneId()) {
+							//In de exacte zone
+						} else {
+							int gevonden = 0;
+							for(int z : zones.get(oplossing.getVoertuig().get(verplaatstVoertuigId).getZoneId()).getAanliggendId()) {
+								if(z == oplossing.getVoertuig().get(verplaatstVoertuigId).getZoneId()) {
+									//In een omliggende zone!
+									gevonden = 1;
+								}
+							}
+							
+							if(gevonden == 0) {
+								//Niet in de exacte zone en niet in de omliggende zone!
+								r.setVoertuig(null);
+								r.setVoertuigId(null);
+								int gevonden1 = 0;
+								for(AReservatie r1 : oplossing.getVoertuig().get(verplaatstVoertuigId).getReservaties()) {
+									if(r1.getResId() == r.getResId()) {
+										gevonden1 = 1;
+										oplossing.getVoertuig().get(verplaatstVoertuigId).getReservaties().remove(r1);
+										break;
+									}
+								}
+								if(gevonden1 == 0) {
+									//System.out.println("Fout in unlink! De 2 reservatielijsten zijn niet compatiebel.");
+									System.exit(1);
+								}
+								break;
+							}
+							
+						}
+					}
+					i++;
+				}
+				
 				if(!isMogelijk(oplossing.getVoertuig().get(verplaatstVoertuigId), zones, oplossing)) {
 					unlink(oplossing, oplossing.getVoertuig().get(verplaatstVoertuigId));
+					oplossing = linkToRes(oplossing.getVoertuig().get(verplaatstVoertuigId), oplossing, zones, reservatiesOpgave);
+				} else {
 					oplossing = linkToRes(oplossing.getVoertuig().get(verplaatstVoertuigId), oplossing, zones, reservatiesOpgave);
 				}
 			} else {
@@ -58,17 +101,18 @@ public class Zoeken {
 	
 	//Linken aan nieuwe mogelijke reservatie
 	private AOplossing linkToRes(AVoertuig voertuig, AOplossing oplossing, ArrayList<Zone> zones, ArrayList<Reservatie> reservatieOpgave) {
-		for(AReservatie reservatie : oplossing.getReservatie()) {
+		for(AReservatie reservatie : oplossing.getReservatie()) {			
 			//In de gewenste zone? => Dit hebben we het liefst!
 			if(reservatie.getGewZoneId() == voertuig.getZoneId()) {
 				
 				int gevonden = 0;
-				int tijd_mogelijk = 0;
+				int tijd_mogelijk = 1;
 				
 				
 				for(int mogelijkVoertuig : reservatieOpgave.get(reservatie.getResId()).getVoertuigID()) {
 					if(mogelijkVoertuig == voertuig.getVoertuigId()) {
 						gevonden = 1;
+						break;
 					}
 				}
 				
@@ -76,8 +120,9 @@ public class Zoeken {
 					//System.out.println("Size:" + voertuig.getReservaties().size());
 					
 					for(AReservatie VoertuigReservatie : voertuig.getReservaties()) {
-						if(tijdschema.getSchema(VoertuigReservatie.getResId(), reservatie.getResId())) {
-							tijd_mogelijk = 1;
+						if(!tijdschema.getSchema(VoertuigReservatie.getResId(), reservatie.getResId())) {
+							tijd_mogelijk = 0;
+							break;
 						}
 					}	
 				} 
@@ -86,14 +131,14 @@ public class Zoeken {
 				}
 				
 				if(gevonden == 1 && tijd_mogelijk == 1) {
-					if(reservatie.getVoertuig() == null) {
+					//if(reservatie.getVoertuig() == null) {
 						reservatie.setVoertuig(voertuig);
 						reservatie.setVoertuigId(voertuig.getVoertuigId());
 						voertuig.addReservatie(reservatie);
 						//System.out.println("Voertuig " + voertuig.getVoertuigId() + " gelinkt aan reservatie " + reservatie.getResId() + " in zone " + voertuig.getZoneId());
 						
 						return oplossing;
-					}
+					//}
 				}
 			}			
 		}		
@@ -124,6 +169,8 @@ public class Zoeken {
 	}
 	
 	private boolean isMogelijk(AVoertuig voertuig, ArrayList<Zone> zones, AOplossing oplossing) {
+		//-1 = Het is oké
+		int controle = -1;
 		for(AReservatie reservatie : oplossing.getReservatie()) {
 			if(reservatie.getVoertuigId() != null) {
 				if(reservatie.getVoertuigId() == voertuig.getVoertuigId()) {
@@ -217,12 +264,19 @@ public class Zoeken {
 				}
 			}
 			if(gevonden == 0) {
+				//Een nog niet gelinkte auto gevonden!
 				oplossing.getVoertuig().get(random).setZoneId(randomnummer2);
 				return random;
 			}
 		}
 		
-		oplossing.getVoertuig().get(randomnummer.get(0)).setZoneId(randomnummer2);
+		//Alle auto's waren reeds gelinkt!
+		//+Neem een naburige zone ipv een random zone!
+		Zone exacteZone = zones.get(oplossing.getVoertuig().get(randomnummer.get(0)).getZoneId());
+		int buurZone = rand.nextInt(exacteZone.getAanliggendId().size());
+		
+		oplossing.getVoertuig().get(randomnummer.get(0)).setZoneId(exacteZone.getAanliggendId().get(buurZone));
+		
 
 		//Aangepast voertuigId teruggeven
 		return randomnummer.get(0);
