@@ -7,24 +7,26 @@ import gegevens.*;
 import oplossing.*;
 
 
-public class Zoeken {
+public class Zoeken {	
+	private Tijdschema tijdschema;
 	
-	public AOplossing zoeken(AOplossing oplossing, ArrayList<Zone> zones, ArrayList<Reservatie> reservatiesOpgave) {
+	public AOplossing zoeken(AOplossing oplossing, ArrayList<Zone> zones, ArrayList<Reservatie> reservatiesOpgave, Tijdschema tijdschemaOpgave) {
 		
 		System.out.println("Zoeken:");
 		
+		tijdschema = tijdschemaOpgave;		
 		int teller = 0;
 		int bestKost = 100000000;
 		AOplossing besteOplossing = null;
 		
-		while(teller < 10000) {
+		while(teller < 10000000) {
 			//Random voertuig nemen en en random zone plaatsen
 			int verplaatstVoertuigId = random(oplossing, zones);
-			System.out.println("Verplaatst voertuig: " + Integer.toString(verplaatstVoertuigId) + "; Zone: "+ Integer.toString(oplossing.getVoertuig().get(verplaatstVoertuigId).getZoneId()));
+			//System.out.println("Verplaatst voertuig: " + Integer.toString(verplaatstVoertuigId) + "; Zone: "+ Integer.toString(oplossing.getVoertuig().get(verplaatstVoertuigId).getZoneId()));
 			
 			//Is voertuig gelinkt aan zone?
 			if(isLinked(oplossing.getVoertuig().get(verplaatstVoertuigId), oplossing)) {
-				System.out.println("Linked");
+				//System.out.println("Linked");
 				//Is de nieuwe link mogelijk of niet mogelijk?
 				if(!isMogelijk(oplossing.getVoertuig().get(verplaatstVoertuigId), zones, oplossing)) {
 					unlink(oplossing, oplossing.getVoertuig().get(verplaatstVoertuigId));
@@ -38,19 +40,19 @@ public class Zoeken {
 			int kost = BerekenKost.bereken(oplossing.getVoertuig(), oplossing.getReservatie());
 					
 			//Kost initiele oplossing
-			System.out.println("Kost: " + Integer.toString(kost));
+			//System.out.println("Kost: " + Integer.toString(kost));
 			
 			if(kost < bestKost) {
 				bestKost = kost;
 				besteOplossing = oplossing.copy();
-				System.out.println("Herberekende kost = " + BerekenKost.bereken(besteOplossing.getVoertuig(), besteOplossing.getReservatie()));
+				//System.out.println("Herberekende kost = " + BerekenKost.bereken(besteOplossing.getVoertuig(), besteOplossing.getReservatie()));
 			}
 		
 			teller++;
 		}
 		
-		System.out.println("Herberekende kost = " + BerekenKost.bereken(besteOplossing.getVoertuig(), besteOplossing.getReservatie()));
-		System.out.println("Bestkost = "+ bestKost);
+		//System.out.println("Herberekende kost = " + BerekenKost.bereken(besteOplossing.getVoertuig(), besteOplossing.getReservatie()));
+		//System.out.println("Bestkost = "+ bestKost);
 		return besteOplossing;
 	}
 	
@@ -61,6 +63,8 @@ public class Zoeken {
 			if(reservatie.getGewZoneId() == voertuig.getZoneId()) {
 				
 				int gevonden = 0;
+				int tijd_mogelijk = 0;
+				
 				
 				for(int mogelijkVoertuig : reservatieOpgave.get(reservatie.getResId()).getVoertuigID()) {
 					if(mogelijkVoertuig == voertuig.getVoertuigId()) {
@@ -68,11 +72,26 @@ public class Zoeken {
 					}
 				}
 				
-				if(gevonden == 1) {
+				if(!voertuig.getReservaties().isEmpty()) {
+					//System.out.println("Size:" + voertuig.getReservaties().size());
+					
+					for(AReservatie VoertuigReservatie : voertuig.getReservaties()) {
+						if(tijdschema.getSchema(VoertuigReservatie.getResId(), reservatie.getResId())) {
+							tijd_mogelijk = 1;
+						}
+					}	
+				} 
+				else {
+					tijd_mogelijk = 1;
+				}
+				
+				if(gevonden == 1 && tijd_mogelijk == 1) {
 					if(reservatie.getVoertuig() == null) {
 						reservatie.setVoertuig(voertuig);
 						reservatie.setVoertuigId(voertuig.getVoertuigId());
-						System.out.println("Voertuig " + voertuig.getVoertuigId() + " gelinkt aan reservatie " + reservatie.getResId() + " in zone " + voertuig.getZoneId());
+						voertuig.addReservatie(reservatie);
+						//System.out.println("Voertuig " + voertuig.getVoertuigId() + " gelinkt aan reservatie " + reservatie.getResId() + " in zone " + voertuig.getZoneId());
+						
 						return oplossing;
 					}
 				}
@@ -108,12 +127,12 @@ public class Zoeken {
 		for(AReservatie reservatie : oplossing.getReservatie()) {
 			if(reservatie.getVoertuigId() != null) {
 				if(reservatie.getVoertuigId() == voertuig.getVoertuigId()) {
-					System.out.println("Voertuig gevonden");
+					//System.out.println("Voertuig gevonden");
 					//Voertuig gevonden
 					
 					//In de exacte zone
 					if(reservatie.getGewZoneId() == voertuig.getZoneId()) {
-						System.out.println("In de exacte zone");
+						//System.out.println("In de exacte zone");
 						return true;
 					}
 					
@@ -124,7 +143,7 @@ public class Zoeken {
 							//Aanliggende zones overlopen
 							for(int idAanliggend : zone.getAanliggendId()) {
 								if(voertuig.getZoneId() == idAanliggend) {
-									System.out.println("In de omliggende zone");
+									//System.out.println("In de omliggende zone");
 									return true;
 								}
 							}
@@ -134,7 +153,7 @@ public class Zoeken {
 			}
 		}
 		
-		System.out.println("Het is niet mogelijk! ("+ voertuig.getVoertuigId() +")");
+		//System.out.println("Het is niet mogelijk! ("+ voertuig.getVoertuigId() +")");
 		return false;
 	}
 	
@@ -156,6 +175,18 @@ public class Zoeken {
 				if(reservatie.getVoertuigId() == voertuig.getVoertuigId()) {
 					reservatie.setVoertuig(null);
 					reservatie.setVoertuigId(null);
+					int gevonden = 0;
+					for(AReservatie r : voertuig.getReservaties()) {
+						if(r.getResId() == reservatie.getResId()) {
+							gevonden = 1;
+							voertuig.getReservaties().remove(r);
+							break;
+						}
+					}
+					if(gevonden == 0) {
+						//System.out.println("Fout in unlink! De 2 reservatielijsten zijn niet compatiebel.");
+						System.exit(1);
+					}
 				}
 			}
 		}	

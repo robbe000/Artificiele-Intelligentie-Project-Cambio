@@ -14,6 +14,8 @@ public class Main {
 	
 	private static Readcsv lees;
 	private static Writecsv schrijf;
+	private static Writecsv schrijf_tijdschema;
+	private static Tijdschema tijdschema;
 
 	public static void main(String[] args) {
 		//INLEZEN		
@@ -59,9 +61,12 @@ public class Main {
 		
 		AOplossing oplossing = new AOplossing(areservaties, avoertuigen);
 		
+		//Tijdschema genereren
+		tijdschema = new Tijdschema(reservaties);
+		
 		//Lokaal zoeken
 		Zoeken zoek = new Zoeken();
-		oplossing = zoek.zoeken(oplossing, zones, reservaties);
+		oplossing = zoek.zoeken(oplossing, zones, reservaties, tijdschema);
 		
 		//Kost berekenen
 		kost = BerekenKost.bereken(oplossing.getVoertuig(), oplossing.getReservatie());
@@ -70,6 +75,10 @@ public class Main {
 		// wegschrijven naar file
 		schrijf = new Writecsv("oplossing.csv");
 		schrijf.writeTocsv(kost, oplossing.getReservatie(), oplossing.getVoertuig());
+		
+		
+		schrijf_tijdschema = new Writecsv("timetable.csv");
+		schrijf_tijdschema.writeTimetable(tijdschema);
 		
 	}
 

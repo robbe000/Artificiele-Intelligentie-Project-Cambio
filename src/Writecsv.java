@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import LokaalZoeken.Tijdschema;
 import gegevens.Reservatie;
 import gegevens.Voertuig;
 import gegevens.Zone;
@@ -96,4 +97,37 @@ public class Writecsv {
 		
 
 	}
+	
+	public void writeTimetable(Tijdschema tijdschema)
+	{
+		String schrijfweg = "";
+		for(int i = 0; i< 100; i++)
+		{
+			for(int j = 0 ;j < 100; j++)
+			{
+				schrijfweg += tijdschema.getSchema(i, j).toString() + ";";
+			}
+			try {
+				this.bufferedwriter.write(schrijfweg);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			try {
+				this.bufferedwriter.newLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			schrijfweg = "";
+		}
+		
+		try {
+			this.bufferedwriter.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }

@@ -1,4 +1,6 @@
+package LokaalZoeken;
 import java.util.*;
+
 
 import gegevens.*;
 
@@ -6,8 +8,9 @@ public class Tijdschema {
 	private Boolean schema[][];
 	private ArrayList<Reservatie> reservaties;
 
+
 	public Boolean getSchema(int x, int y) {
-		return schema[x][y];
+		return this.schema[x][y];
 	}
 
 	public void setSchema(int x, int y, Boolean b) {
@@ -41,8 +44,8 @@ public class Tijdschema {
 					int beginY = (dagY * 1440) + startTijdY;
 					int eindY = beginY + duurY;
 					
-					if(beginX >= eindY || eindX <= beginY) schema[x][y] = false;
-					else schema[x][y] = true;
+					if(beginX >= eindY || eindX <= beginY) schema[x][y] = true;
+					else schema[x][y] = false;
 				}
 			}
 		}
