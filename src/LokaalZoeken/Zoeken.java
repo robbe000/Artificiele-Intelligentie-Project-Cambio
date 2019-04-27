@@ -9,17 +9,17 @@ import oplossing.*;
 
 public class Zoeken {	
 	private Tijdschema tijdschema;
-	
+	int teller = 0;
 	public AOplossing zoeken(AOplossing oplossing, ArrayList<Zone> zones, ArrayList<Reservatie> reservatiesOpgave, Tijdschema tijdschemaOpgave) {
 		
 		System.out.println("Zoeken:");
 		
 		tijdschema = tijdschemaOpgave;		
-		int teller = 0;
+
 		int bestKost = 100000000;
 		AOplossing besteOplossing = null;
 		
-		while(teller < 100000000) {
+		while(teller < 1000000) {
 			//Random voertuig nemen en en random zone plaatsen
 			int verplaatstVoertuigId = random(oplossing, zones);
 			//System.out.println("Verplaatst voertuig: " + Integer.toString(verplaatstVoertuigId) + "; Zone: "+ Integer.toString(oplossing.getVoertuig().get(verplaatstVoertuigId).getZoneId()));
@@ -70,13 +70,30 @@ public class Zoeken {
 				}
 				
 				if(!isMogelijk(oplossing.getVoertuig().get(verplaatstVoertuigId), zones, oplossing)) {
-					unlink(oplossing, oplossing.getVoertuig().get(verplaatstVoertuigId));
+					
+					if(verplaatstVoertuigId == 10)
+					{
+						System.out.println("Voor unlink to res voertuig 10 size ezservaties" + oplossing.getVoertuig().get(10).getReservaties().size());
+						System.out.println("itteratie:"+teller);			
+					}
+					
+					
+					oplossing = unlink(oplossing, oplossing.getVoertuig().get(verplaatstVoertuigId));
 					oplossing = linkToRes(oplossing.getVoertuig().get(verplaatstVoertuigId), oplossing, zones, reservatiesOpgave);
 				} else {
 					oplossing = linkToRes(oplossing.getVoertuig().get(verplaatstVoertuigId), oplossing, zones, reservatiesOpgave);
 				}
+				
+
+				
 			} else {
 				oplossing = linkToRes(oplossing.getVoertuig().get(verplaatstVoertuigId), oplossing, zones, reservatiesOpgave);
+			}
+			
+			if(verplaatstVoertuigId == 10)
+			{
+				System.out.println("Na link to res voertuig 10 size ezservaties" + oplossing.getVoertuig().get(10).getReservaties().size());
+				System.out.println("itteratie:"+teller);			
 			}
 			
 			//Kost berekenen
@@ -88,6 +105,14 @@ public class Zoeken {
 			if(kost < bestKost) {
 				bestKost = kost;
 				besteOplossing = oplossing.copy();
+				
+				if(verplaatstVoertuigId == 10)
+				{
+					System.out.println("Na opslaan oplossing" + besteOplossing.getVoertuig().get(10).getReservaties().size());
+					System.out.println("itteratie:"+teller);			
+				}
+				
+				
 				//System.out.println("Herberekende kost = " + BerekenKost.bereken(besteOplossing.getVoertuig(), besteOplossing.getReservatie()));
 			}
 		
@@ -136,6 +161,13 @@ public class Zoeken {
 						reservatie.setVoertuigId(voertuig.getVoertuigId());
 						voertuig.addReservatie(reservatie);
 						//System.out.println("Voertuig " + voertuig.getVoertuigId() + " gelinkt aan reservatie " + reservatie.getResId() + " in zone " + voertuig.getZoneId());
+						
+						if(voertuig.getVoertuigId() == 10)
+						{
+							System.out.println("In setten reservatie voertuig 10 size ezservaties" + voertuig.getReservaties().size());
+							System.out.println("In toegevoegde reservatie:"+ reservatie.getResId());	
+							System.out.println("itteratie:"+ teller);
+						}
 						
 						return oplossing;
 					//}
@@ -216,27 +248,46 @@ public class Zoeken {
 		return false;
 	}
 	
-	private void unlink(AOplossing oplossing, AVoertuig voertuig) {
+	private AOplossing unlink(AOplossing oplossing, AVoertuig voertuig) {
+		
+		if(voertuig.getVoertuigId() == 10)
+		{
+			System.out.println("In unlink reservatie voertuig 10 size ezservaties" + voertuig.getReservaties().size());
+			System.out.println("Itteration:"+ teller);	
+			int brol = 2;
+		}
+		
+		
 		for(AReservatie reservatie : oplossing.getReservatie()) {
 			if(reservatie.getVoertuigId() != null) {
 				if(reservatie.getVoertuigId() == voertuig.getVoertuigId()) {
 					reservatie.setVoertuig(null);
 					reservatie.setVoertuigId(null);
-					int gevonden = 0;
+					//int gevonden = 0;
+					/*
 					for(AReservatie r : voertuig.getReservaties()) {
 						if(r.getResId() == reservatie.getResId()) {
 							gevonden = 1;
+							if(voertuig.getVoertuigId() == 10)
+							{
+								System.out.println("In setten reservatie voertuig 10 size ezservaties" + voertuig.getReservaties().size());
+								System.out.println("In remove reservatie:"+ reservatie.getResId());	
+							}
 							voertuig.getReservaties().remove(r);
 							break;
 						}
 					}
-					if(gevonden == 0) {
+					*/
+					voertuig.getReservaties().remove(reservatie);
+					//if(gevonden == 0) {
 						//System.out.println("Fout in unlink! De 2 reservatielijsten zijn niet compatiebel.");
-						System.exit(1);
-					}
+					//	System.exit(1);
+					//}
+					return oplossing;
 				}
 			}
-		}	
+		}
+		return oplossing;
 	}
 
 	private int random(AOplossing oplossing, ArrayList<Zone> zones)
