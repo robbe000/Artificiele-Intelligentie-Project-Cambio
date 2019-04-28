@@ -1,0 +1,2 @@
+cd C:\Users\Max\Desktop\school\Master\AI\Artificiele-Intelligentie-Project-Cambio
+java -jar validator.jar 100_5_14_25.csv oplossing.csv

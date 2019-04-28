@@ -66,7 +66,7 @@ public class AOplossing implements Cloneable {
 			copyVoertuig.setZoneId(voertuig.getZoneId());
 			//copyVoertuig.setReservaties(copyResevaties.get(voertuig.get));
 			if(copyReservaties != null && voertuig.getReservaties().size() != 0) {
-				System.out.println(voertuig.getReservaties().size());
+				//System.out.println(voertuig.getReservaties().size());
 				for(AReservatie resit : copyReservaties) {
 					for(int q = 0; q < voertuig.getReservaties().size(); q++)
 					{

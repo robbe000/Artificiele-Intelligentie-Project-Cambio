@@ -33,8 +33,8 @@ public class InitieleOplossing {
 		for(Voertuig voertuig: voertuigen) {
 			AVoertuig oplossing = new AVoertuig();
 			oplossing.setVoertuigId(voertuig.getId());
-			oplossing.setZoneId(zones.get(0).getId());
-			
+			//oplossing.setZoneId(zones.get(0).getId());
+			oplossing.setZoneId(-1);
 			oplossingen.add(oplossing);
 		}
 		
