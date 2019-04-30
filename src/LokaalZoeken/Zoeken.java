@@ -11,7 +11,7 @@ import oplossing.*;
 public class Zoeken {	
 	private Tijdschema tijdschema;
 	int teller = 0;
-	public AOplossing zoeken(AOplossing initOplossing, ArrayList<Zone> zones, ArrayList<Reservatie> reservatiesOpgave, Tijdschema tijdschemaOpgave) {
+	public AOplossing zoeken(AOplossing initOplossing, ArrayList<Zone> zones, ArrayList<Reservatie> reservatiesOpgave, Tijdschema tijdschemaOpgave, long tijdlimiet, long randomseed) {
 		
 		System.out.println("Zoeken:");
 		
@@ -21,9 +21,13 @@ public class Zoeken {
 		AOplossing oplossing;
 		AOplossing besteOplossing = null;
 		
-		while(teller < 1000000) {
+		long tijd= System.currentTimeMillis();
+		long eindtijd = tijd + tijdlimiet;
+		Random rnd = new Random(randomseed);
+		
+		while(System.currentTimeMillis() < eindtijd) {
 			oplossing = initOplossing.copy();
-			Collections.shuffle(reservatiesOpgave);
+			Collections.shuffle(reservatiesOpgave, rnd);
 			for(Reservatie reservatie : reservatiesOpgave) {
 				boolean autoGevonden = false;
 				//Collections.shuffle(reservatie.getVoertuigID());
@@ -38,7 +42,7 @@ public class Zoeken {
 						break;
 					}
 					else {
-						Collections.shuffle(zones.get(gewensteZone).getAanliggendId());
+						//Collections.shuffle(zones.get(gewensteZone).getAanliggendId());
 						for(int zoneAanliggend : zones.get(gewensteZone).getAanliggendId()) {
 							if(zoneId == zoneAanliggend) {
 								//deze auto is geschikt voor de reservatie (aanliggende zone) -> link
@@ -61,7 +65,6 @@ public class Zoeken {
 				besteOplossing = oplossing.copy();
 				System.out.println("Nieuwe best kost: " + kost);
 			}
-			teller++;
 		}
 		return besteOplossing;
 	}
