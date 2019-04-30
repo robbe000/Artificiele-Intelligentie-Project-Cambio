@@ -14,19 +14,12 @@ public class Main {
 	
 	private static Readcsv lees;
 	private static Writecsv schrijf;
+	private static Writecsv schrijf_tijdschema;
 	private static Tijdschema tijdschema;
 
 	public static void main(String[] args) {
-		//argumenten inlezen
-		String inputfile = args[0];
-		String outputfile = args[1];
-		long tijdslimiet = Long.parseLong(args[2]);		//tijd in seconden
-		long randomseed = Long.parseLong(args[3]);
-		int numThreads = Integer.parseInt(args[4]);
-		
-		tijdslimiet = tijdslimiet * 1000;				//van seconden naar miliseconden omzetten
 		//INLEZEN		
-		lees = new Readcsv(inputfile);
+		lees = new Readcsv("100_5_14_25.csv");
 		reservaties = lees.LeesReservaties();
 		int kost;
 		
@@ -73,15 +66,20 @@ public class Main {
 		
 		//Lokaal zoeken
 		Zoeken zoek = new Zoeken();
-		oplossing = zoek.zoeken(oplossing, zones, reservaties, tijdschema, tijdslimiet, randomseed);
+		oplossing = zoek.zoeken(oplossing, zones, reservaties, tijdschema);
 		
 		//Kost berekenen
 		kost = BerekenKost.bereken(oplossing.getVoertuig(), oplossing.getReservatie());
 		System.out.println("Bestkost (In main)= "+ kost);
 		
 		// wegschrijven naar file
-		schrijf = new Writecsv(outputfile);
+		schrijf = new Writecsv("oplossing.csv");
 		schrijf.writeTocsv(kost, oplossing.getReservatie(), oplossing.getVoertuig());
+		
+		
+		schrijf_tijdschema = new Writecsv("timetable.csv");
+		schrijf_tijdschema.writeTimetable(tijdschema);
+		
 	}
 
 }
